@@ -17,7 +17,6 @@ import sys
 #
 
 def auxiliary_isSafe(arr, c):
-
     for i in range(len(arr) - 1):
         if arr[i] < arr[i + 1]:
             if not c[i] < c[i + 1]:
@@ -31,31 +30,30 @@ def auxiliary_isSafe(arr, c):
     return True
 
 
-results = []
+def auxiliary_candies(arr, c, possibleCandies, cur, pos):
+    # base case
+    if pos == len(arr)-1:
+        if auxiliary_isSafe(arr, c):
+            return sum(c)
+        else:
+            return 10000000000
 
-
-def auxiliary_candies(arr, c, possibleCandies, pos):
-    if auxiliary_isSafe(arr, c) and pos == len(arr) - 1:
-        return True
-    if not auxiliary_isSafe(arr, c) and pos == len(arr) - 1:
-        return False
-
-    for candy in possibleCandies:
-        c[pos + 1] = candy
-        if auxiliary_candies(arr, c, possibleCandies, pos + 1):
-            results.append(sum(c))
+    for element in possibleCandies:
+        c[pos + 1] = element
+        cur = min(cur, auxiliary_candies(arr, c, possibleCandies, cur, pos + 1))
         c[pos + 1] = 0
-    return results
+    return cur
 
 
 def candies(arr, c, possibleCandies):
-    result = auxiliary_candies(arr, c, possibleCandies, -1)
+    cur = 10000000000
+    result = auxiliary_candies(arr, c, possibleCandies, cur, -1)
     print(result)
-    return result
+    return (0)
 
 
 if __name__ == '__main__':
-    arr = [1, 2, 1, 2]
+    arr = [1, 2, 1, 2, 2, 3, 4]
     c = []
     possibleCandies = []
     for i in range(len(arr)):
