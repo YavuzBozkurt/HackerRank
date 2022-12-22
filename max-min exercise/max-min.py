@@ -16,19 +16,28 @@ import sys
 #  2. INTEGER_ARRAY arr
 #
 
-# TODO: validation function
-def Valid():
-    return 0
-
 
 # TODO: recursive backtracking function
-def unfairBacktrack(k, arr, unfairArr, pos):
-    return 0
+def unfairBacktrack(arr, unfairArr, pos, cur):
+
+    if pos == len(unfairArr) - 1:
+        return unfairArr
+
+    for element in arr[:]:
+        unfairArr[pos + 1] = element
+        setFound = unfairBacktrack(arr, unfairArr, pos + 1, cur)
+        if max(setFound) - min(setFound) < max(cur) - min(cur):
+            cur = setFound
+        unfairArr[pos+1] = 0
+    return cur
 
 
 def maxMin(k, arr):
     unfairArr = []
-    result = unfairBacktrack(k, arr, unfairArr, -1)
+    for i in range(k):
+        unfairArr.append(0)
+    cur = [10000000000000000000000, -10000000000000000000000]
+    result = unfairBacktrack(arr, unfairArr, -1, cur)
     print(result)
     return result
 
@@ -36,9 +45,8 @@ def maxMin(k, arr):
 # Write your code here
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
     k = 2
-    arr = [1, 4, 7, 2]
+    arr = [1, 2, 3, 4]
 
     maxMin(k, arr)
