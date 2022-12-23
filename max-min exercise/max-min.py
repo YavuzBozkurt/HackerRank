@@ -18,32 +18,36 @@ import sys
 
 
 # TODO: recursive backtracking function
-def unfairBacktrack(set, unfairArr, pos, cur):
+def unfairBacktrack(arr, unfairArr, pos, cur):
+    # base case
     if pos == len(unfairArr) - 1:
         return unfairArr
 
-    for element in set:
+    for element in arr:
+        # add the element to the unfairArr
         unfairArr[pos + 1] = element
-        setFound = unfairBacktrack([x for x in set if x != element], unfairArr, pos + 1, cur)
+        # exclude the already added element
+        setFound = unfairBacktrack([x for x in arr if x != element], unfairArr, pos + 1, cur)
+        # compare the computed set with the least unfair set found so far
         if max(setFound) - min(setFound) < max(cur) - min(cur):
+            # found a less unfair set, update cur
             cur = [x for x in setFound]
+    # return the solution
     return cur
 
 
-def maxMin(k, set):
+def maxMin(k, arr):
     unfairArr = []
     for i in range(k):
         unfairArr.append(0)
     cur = [10000000000000000000000, -10000000000000000000000]
-    result = unfairBacktrack(set, unfairArr, -1, cur)
-    print(result)
-    return result
+    return unfairBacktrack(arr, unfairArr, -1, cur)
 
 
 # Write your code here
 
 if __name__ == '__main__':
-    k = 3
-    set = [1, 19, 4, 3]
-
-    maxMin(k, set)
+    k = 2
+    # all the elements need to be identical
+    arr = [1, 2, 4, 3]
+    print(maxMin(k, arr))
