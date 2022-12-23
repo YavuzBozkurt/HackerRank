@@ -26,8 +26,8 @@ def isValid(k, plantConfig, plant_indices):
             if index - (i_left + 1) < 0:
                 break
             isCovered[index - (i_left + 1)] = 1
-        for i_right in plant_indices:
-            if index - (i_right + 1) >= len(isCovered):
+        for i_right in range(k-1):
+            if index + (i_right + 1) >= len(isCovered):
                 break
             isCovered[index + (i_right + 1)] = 1
     if sum(isCovered) == len(isCovered):
@@ -62,6 +62,3 @@ if __name__ == '__main__':
     k = 0
     arr = [0, 1, 1, 1, 0, 0, 0]
     # print(pylons(k, arr))
-    m = 3
-    for i in range(m - 1):
-        print(i)
