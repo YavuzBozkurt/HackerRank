@@ -19,13 +19,12 @@ import sys
 
 # TODO: recursive backtracking function
 def unfairBacktrack(set, unfairArr, pos, cur):
-
-    if pos == len(unfairArr)-1:
+    if pos == len(unfairArr) - 1:
         return unfairArr
 
-    for element in set.copy():
+    for element in set:
         unfairArr[pos + 1] = element
-        setFound = unfairBacktrack(set.difference({element}), unfairArr, pos + 1, cur)
+        setFound = unfairBacktrack([x for x in set if x != element], unfairArr, pos + 1, cur)
         if max(setFound) - min(setFound) < max(cur) - min(cur):
             cur = setFound
     return cur
@@ -44,8 +43,12 @@ def maxMin(k, set):
 # Write your code here
 
 if __name__ == '__main__':
-
     k = 2
-    set = {1, 4, 3, 19}
+    set = [1, 19, 4]
 
     maxMin(k, set)
+
+#print(f'element: {element}, set:{set}, unfairArr: {unfairArr}, cur {cur}')
+#print(f'max(setFound) : {max(setFound)} - min(setFound): {min(setFound)}  < max(cur) : {max(cur)} - min(cur): {min(cur)}')
+#print(f'base case is hit with cur: {cur}, set: {set}, unfairArr: {unfairArr}')
+#print(f'cur is set to {cur}')
