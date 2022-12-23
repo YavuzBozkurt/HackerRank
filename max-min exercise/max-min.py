@@ -26,7 +26,7 @@ def unfairBacktrack(set, unfairArr, pos, cur):
         unfairArr[pos + 1] = element
         setFound = unfairBacktrack([x for x in set if x != element], unfairArr, pos + 1, cur)
         if max(setFound) - min(setFound) < max(cur) - min(cur):
-            cur = setFound
+            cur = [x for x in setFound]
     return cur
 
 
@@ -43,16 +43,7 @@ def maxMin(k, set):
 # Write your code here
 
 if __name__ == '__main__':
-    k = 2
-    set = [1, 19, 4]
+    k = 3
+    set = [1, 19, 4, 3]
 
-    #maxMin(k, set)
-
-    val = [1,2]
-    cur = val
-    val.append(3)
-    print(cur)
-#print(f'element: {element}, set:{set}, unfairArr: {unfairArr}, cur {cur}')
-#print(f'max(setFound) : {max(setFound)} - min(setFound): {min(setFound)}  < max(cur) : {max(cur)} - min(cur): {min(cur)}')
-#print(f'base case is hit with cur: {cur}, set: {set}, unfairArr: {unfairArr}')
-#print(f'cur is set to {cur}')
+    maxMin(k, set)
