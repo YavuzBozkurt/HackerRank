@@ -27,19 +27,23 @@ def auxiliary_unfair(unfairArr, k):
 
 
 # TODO: recursive backtracking algorithm
-def fairBacktrack(k, arr, unfairArr, pos):
-    if pos == len(arr) - 1:
-        return auxiliary_unfair(unfairArr)
+def fairBacktrack(k, arr, unfairArr, pos, cur):
+    if pos == len(unfairArr) - 1:
+        return auxiliary_unfair(unfairArr, k)
 
-    return 0
+    for element in arr:
+        unfairArr[pos + 1] = element
+        index_record = arr.index(element)
+        cur = min(cur, fairBacktrack(k, [x for x in arr[arr.index(element) + 1:]], unfairArr, pos + 1, cur))
+        unfairArr[pos + 1] = 0
+    return cur
 
 
 def fairCut(k, arr):
-    return fairBacktrack(k, arr, [0 for i in range(len(arr))], -1)
+    return fairBacktrack(k, arr, [0 for i in range(len(arr))], -1, 100000000000)
 
 
 if __name__ == '__main__':
-    k = 2
-    arr = [1, 2, 3, 4]
-    # [1, 1], [2, 1]
-    # print(fairCut(k, arr))
+    k = 1
+    arr = [3, 3, 3, 1]
+    print(fairCut(k, arr))
