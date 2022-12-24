@@ -18,50 +18,35 @@ import sys
 # ENTIRE SEQUENCE VERSION, MONKE MISUNDERSTOOD :)
 
 # TODO: solution validation algo
-def isValid(k, candleConfig, no_of_candles):
-    # initialize sets to store seen candles and colors
-    seenSoFar, colorsSoFar = [], []
-    for x in candleConfig:
-        # if candle has not been seen before, add it
-        if x not in seenSoFar:
-            seenSoFar.append(x)
-    if len(seenSoFar) == no_of_candles:
-        for x in candleConfig[:-1]:
-            # if the height of current candle is not less than the height of the next candy, return false
-            if not x[0] < candleConfig[candleConfig.index(x) + 1][0]:
-                return False
-        # check if the candle sequence has every color among k at least once
-        for x in candleConfig:
-            if x[1] not in colorsSoFar:
-                colorsSoFar.append(x[1])
-        if len(colorsSoFar) == k:
-            return True
-        else:
+def isValid(k, candleConfig):
+    # check if the candle sequence is strictly increasing in terms of height
+    for x in candleConfig[:-1]:
+        if not x[0] < candleConfig[candleConfig.index(x) + 1][0]:
             return False
-    # if there are duplicate candies, return false
-    else:
+    # check if all colors are present in the candle sequence
+    if len(set([x[1] for x in candleConfig])) != k:
         return False
+    return True
 
 
 # TODO: recursive bactracking algorithm
 def candleBacktracking(k, candles, candleConfig, cur):
-    # base case
+    # the base
     if len(candleConfig) == len(candles):
-        if isValid(k, candleConfig, len(candles)):
-            # valid configuration found, update cur
+        return cur
+    else:
+        # if the candle sequence is valid, increment solution count by one
+        if isValid(k, candleConfig):
             cur += 1
-            return cur
-        else:
-            # invalid configuration, don't update cur
-            return cur
 
+    # select a candidate
     for candle in candles:
-        # add candle to the candy configuration
+        # add the candidate to the candle sequence
         candleConfig.append(candle)
         cur = candleBacktracking(k, candles, candleConfig, cur)
-        # remove candle from the configuration to backtrack
+        # backtrack by deleting the candidate from the candle sequence
         del candleConfig[len(candleConfig) - 1]
-
+    # return the solution count
     return cur
 
 
