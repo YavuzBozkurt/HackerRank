@@ -1,0 +1,62 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+
+#
+# Complete the 'kingdomDivision' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts following parameters:
+#  1. INTEGER n
+#  2. 2D_INTEGER_ARRAY roads
+#
+# TODO: solution validation function
+def isPeaceful(n, roads, kingdomConfig):
+    s1_cities, s2_cities = \
+        [kingdomConfig.index(i)+1 for i in kingdomConfig if i == 1], [kingdomConfig.index(i)+1 for i in kingdomConfig if i == 2]
+    for city in s1_cities:
+        city_roads = [road for road in roads if city in road]
+        for road in city_roads:
+            city_pos = road.index(city)
+            if road[city_pos ^ 1] in s1_cities:
+                continue
+            if road[city_pos ^ 1] in s2_cities:
+                if len([kingdomRoad for kingdomRoad in roads if (kingdomRoad[0] == road[city_pos ^ 1] and kingdomRoad[1] in s2_cities)
+                        or (kingdomRoad[0] in s2_cities and kingdomRoad[1] == road[city_pos ^ 1]) ]) >= 1:
+                    pass
+                if len([kingdomRoad for kingdomRoad in roads if (kingdomRoad[0] == road[city_pos] and kingdomRoad[1] in s1_cities)
+                        or (kingdomRoad[0] in s1_cities and kingdomRoad[0] == road[city_pos ^ 1]) ]) >= 1:
+                    pass
+    return True
+
+
+# TODO: recursive backtracking algorithm
+def kingdomBacktrack(n, roads, kingdomConfig, pos, cur):
+    if pos == n:
+        if isPeaceful(n, roads, kingdomConfig):
+            cur += 1
+            return cur
+        else:
+            return cur
+
+    for sibling in [1, 2]:
+        kingdomConfig[pos + 1] = sibling
+        cur = kingdomBacktrack(n, roads, kingdomConfig, pos, cur)
+        kingdomConfig[pos + 1] = 0
+
+    return cur
+
+
+def kingdomDivision(n, roads):
+    return kingdomBacktrack(n, roads, [0 for i in range(n)], -1, 0)
+
+
+if __name__ == '__main__':
+    n = 5
+    roads = [[1, 2], [1, 3], [3, 4], [3, 5]]
+    print(kingdomDivision(n, roads))
