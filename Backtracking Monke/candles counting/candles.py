@@ -47,7 +47,7 @@ def candleBacktracking(k, candles, candleConfig, cur):
         # backtrack by deleting the candidate from the candle sequence
         del candleConfig[len(candleConfig) - 1]
     # return the solution count
-    return cur
+    return cur % (10**9+7)
 
 
 def candlesCounting(k, candles):
