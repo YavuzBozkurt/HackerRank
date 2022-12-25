@@ -18,23 +18,46 @@ import sys
 #
 
 # TODO: solution validation algorithm
-def isValid():
-    return 0
+def isValid(arr, x):
+
+    if arr[0] != 1:
+        return False
+
+    if arr[len(arr)-1] != x:
+        return False
+
+    for i in range(len(arr)-1):
+        if arr[i] == arr[i+1]:
+            return False
+
+    return True
 
 
 # TODO: recursive backtracking algorithm
-def arrBacktracking():
-    return 0
+def arrBacktracking(arr, k, x, pos, cur):
+
+    if pos == n-1:
+        if isValid(arr, x):
+            cur += 1
+            return cur
+        else:
+            return cur
+
+    for val in [i+1 for i in range(k)]:
+        arr[pos+1] = val
+        cur = arrBacktracking(arr, k, x, pos + 1, cur)
+        arr[pos+1] = 0
+
+    return cur
 
 
 def countArray(n, k, x):
-    return 0
+    return arrBacktracking([0 for i in range(n)], k, x, -1, 0)
     # Return the number of ways to fill in the array.
 
 
 if __name__ == '__main__':
-    n = 0
-    k = 0
-    x = 0
-
+    n = 4
+    k = 3
+    x = 2
     print(countArray(n, k, x))
