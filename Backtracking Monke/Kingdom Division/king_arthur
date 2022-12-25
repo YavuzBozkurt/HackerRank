@@ -16,7 +16,8 @@ import sys
 #  2. 2D_INTEGER_ARRAY roads
 #
 
-# NOTE:
+# NOTE: this algorithm depends on the invariant that if a sibling 1 city cannot attack and
+#       cannot be attacked, then there cannot be way
 # TODO: solution validation function
 def isPeaceful(roads, kingdomConfig):
 
