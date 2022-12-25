@@ -16,29 +16,37 @@ import sys
 #  2. 2D_INTEGER_ARRAY roads
 #
 # TODO: solution validation function
-def isPeaceful(n, roads, kingdomConfig):
+def isPeaceful(roads, kingdomConfig):
+
     s1_cities, s2_cities = \
-        [kingdomConfig.index(i)+1 for i in kingdomConfig if i == 1], [kingdomConfig.index(i)+1 for i in kingdomConfig if i == 2]
+        [i + 1 for i in range(len(kingdomConfig)) if kingdomConfig[i] == 1], \
+        [i + 1 for i in range(len(kingdomConfig)) if kingdomConfig[i] == 2]
+
     for city in s1_cities:
         city_roads = [road for road in roads if city in road]
         for road in city_roads:
             city_pos = road.index(city)
             if road[city_pos ^ 1] in s1_cities:
                 continue
+
             if road[city_pos ^ 1] in s2_cities:
-                if len([kingdomRoad for kingdomRoad in roads if (kingdomRoad[0] == road[city_pos ^ 1] and kingdomRoad[1] in s2_cities)
-                        or (kingdomRoad[0] in s2_cities and kingdomRoad[1] == road[city_pos ^ 1]) ]) >= 1:
-                    pass
-                if len([kingdomRoad for kingdomRoad in roads if (kingdomRoad[0] == road[city_pos] and kingdomRoad[1] in s1_cities)
-                        or (kingdomRoad[0] in s1_cities and kingdomRoad[0] == road[city_pos ^ 1]) ]) >= 1:
-                    pass
+
+                if not len([kingdomRoad for kingdomRoad in roads if
+                            (kingdomRoad[0] == road[city_pos ^ 1] and kingdomRoad[1] in s2_cities)
+                            or (kingdomRoad[0] in s2_cities and kingdomRoad[1] == road[city_pos ^ 1])]) >= 1:
+                    return False
+
+                if not len([kingdomRoad for kingdomRoad in roads if
+                            (kingdomRoad[0] == road[city_pos] and kingdomRoad[1] in s1_cities)
+                            or (kingdomRoad[0] in s1_cities and kingdomRoad[0] == road[city_pos])]) >= 1:
+                    return False
     return True
 
 
 # TODO: recursive backtracking algorithm
 def kingdomBacktrack(n, roads, kingdomConfig, pos, cur):
     if pos == n:
-        if isPeaceful(n, roads, kingdomConfig):
+        if isPeaceful(roads, kingdomConfig):
             cur += 1
             return cur
         else:
@@ -59,4 +67,5 @@ def kingdomDivision(n, roads):
 if __name__ == '__main__':
     n = 5
     roads = [[1, 2], [1, 3], [3, 4], [3, 5]]
-    print(kingdomDivision(n, roads))
+    #print(isPeaceful(roads, [2, 2, 1, 1, 1]))
+    # print(kingdomDivision(n, roads))
