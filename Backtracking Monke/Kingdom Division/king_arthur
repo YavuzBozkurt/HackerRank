@@ -15,48 +15,75 @@ import sys
 #  1. INTEGER n
 #  2. 2D_INTEGER_ARRAY roads
 #
+
+# NOTE:
 # TODO: solution validation function
 def isPeaceful(roads, kingdomConfig):
+
+    # identify which city owns to which sibling
     s1_cities, s2_cities = \
         [i + 1 for i in range(len(kingdomConfig)) if kingdomConfig[i] == 1], \
         [i + 1 for i in range(len(kingdomConfig)) if kingdomConfig[i] == 2]
 
+    # for a city that belongs to sibling 1
     for city in s1_cities:
+
+        # identify the roads that are connected to that city
         city_roads = [road for road in roads if city in road]
+
+        # for a road that is connected to the city
         for road in city_roads:
+
+            # identify at which end the city is located at (i.e., [1,x] or [x,1] ?)
             city_pos = road.index(city)
+
+            # if the city is connected to another sibling 1 city, then no war can come out of this road
             if road[city_pos ^ 1] in s1_cities:
                 continue
 
+            # if the city is connected to a sibling 2 city, then a war is possible to come out of this road
             if road[city_pos ^ 1] in s2_cities:
 
+                # if the sibling 2 city is not protected by another sibling 2 city, then there is war
+                # i.e., the sibling 1 city is incapable of attack
                 if not len([kingdomRoad for kingdomRoad in roads if
                             (kingdomRoad[0] == road[city_pos ^ 1] and kingdomRoad[1] in s2_cities)
                             or (kingdomRoad[0] in s2_cities and kingdomRoad[1] == road[city_pos ^ 1])]) >= 1:
                     return False
 
+                # if the sibling 1 city is not protect by another sibling 1 city, then there is war
+                # i.e., the sibling 1 city cannot be attacked
                 if not len([kingdomRoad for kingdomRoad in roads if
                             (kingdomRoad[0] == road[city_pos] and kingdomRoad[1] in s1_cities)
                             or (kingdomRoad[0] in s1_cities and kingdomRoad[0] == road[city_pos])]) >= 1:
                     return False
+
+    # all checks passed, there is peace
     return True
 
 
 # TODO: recursive backtracking algorithm
 def kingdomBacktrack(n, roads, kingdomConfig, pos, cur):
-
+    # base case
     if pos == n-1:
+        # is the kingdom configuration peaceful ?
         if isPeaceful(roads, kingdomConfig):
+            # if so, update solution count
             cur += 1
             return cur
         else:
+            # no peace in the kingdom configuration, don't update solution count
             return cur
 
+    # select a candidate sibling
     for sibling in [1, 2]:
+        # let sibling candidate own city
         kingdomConfig[pos + 1] = sibling
         cur = kingdomBacktrack(n, roads, kingdomConfig, pos + 1, cur)
+        # backtrack by taking city away from sibling
         kingdomConfig[pos + 1] = 0
 
+    # return solution count
     return cur
 
 
@@ -67,5 +94,4 @@ def kingdomDivision(n, roads):
 if __name__ == '__main__':
     n = 5
     roads = [[1, 2], [1, 3], [3, 4], [3, 5]]
-    # print(isPeaceful(roads, [2, 2, 1, 1, 1]))
     print(kingdomDivision(n, roads))
