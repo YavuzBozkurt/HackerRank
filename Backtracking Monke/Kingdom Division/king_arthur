@@ -17,7 +17,6 @@ import sys
 #
 # TODO: solution validation function
 def isPeaceful(roads, kingdomConfig):
-
     s1_cities, s2_cities = \
         [i + 1 for i in range(len(kingdomConfig)) if kingdomConfig[i] == 1], \
         [i + 1 for i in range(len(kingdomConfig)) if kingdomConfig[i] == 2]
@@ -45,7 +44,8 @@ def isPeaceful(roads, kingdomConfig):
 
 # TODO: recursive backtracking algorithm
 def kingdomBacktrack(n, roads, kingdomConfig, pos, cur):
-    if pos == n:
+
+    if pos == n-1:
         if isPeaceful(roads, kingdomConfig):
             cur += 1
             return cur
@@ -54,7 +54,7 @@ def kingdomBacktrack(n, roads, kingdomConfig, pos, cur):
 
     for sibling in [1, 2]:
         kingdomConfig[pos + 1] = sibling
-        cur = kingdomBacktrack(n, roads, kingdomConfig, pos, cur)
+        cur = kingdomBacktrack(n, roads, kingdomConfig, pos + 1, cur)
         kingdomConfig[pos + 1] = 0
 
     return cur
@@ -67,5 +67,5 @@ def kingdomDivision(n, roads):
 if __name__ == '__main__':
     n = 5
     roads = [[1, 2], [1, 3], [3, 4], [3, 5]]
-    #print(isPeaceful(roads, [2, 2, 1, 1, 1]))
-    # print(kingdomDivision(n, roads))
+    # print(isPeaceful(roads, [2, 2, 1, 1, 1]))
+    print(kingdomDivision(n, roads))
