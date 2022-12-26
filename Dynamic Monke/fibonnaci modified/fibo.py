@@ -18,19 +18,26 @@ import sys
 #
 
 # TODO: dynamic programming algorithm
-def fiboDP():
-    return 0
+def fiboDP(t1, t2, n, fibo):
+
+    # base cases
+    fibo[0] = t1
+    fibo[1] = t2
+
+    # 1D tabulation
+    for i in range(2, len(fibo)):
+        fibo[i] = fibo[i-2] + (fibo[i-1])**2
+
+    # return the n'th value
+    return fibo[n-1]
 
 
 def fibonacciModified(t1, t2, n):
-    # Write your code here
-    return 0
+    return fiboDP(0, 1, 6, [0 for i in range(n)])
 
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
-
     t1 = 0
-    t2 = 0
-    n = 0
+    t2 = 1
+    n = 6
     print(fibonacciModified(t1, t2, n))
