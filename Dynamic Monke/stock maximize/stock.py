@@ -32,7 +32,7 @@ def stockDP(prices, goods, T):
                 # sold all goods
                 goods = []
             # or at a point in which trading in future is not favourable for now (i.e., buying causes loss for now)
-            # for profit optimization, we don't but in these cases
+            # for profit optimization, we don't buy in these cases
             else:
                 # don't do trading for this day
                 T[i] = T[i-1]
